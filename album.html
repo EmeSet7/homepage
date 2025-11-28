@@ -2,95 +2,122 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Album Finder</title>
+  <title>Album Explorer</title>
   <style>
     body { font-family: sans-serif; padding: 20px; }
-    img { max-width: 300px; margin-top: 20px; }
+    img { max-width: 300px; margin-top: 20px; display: block; }
     .result { margin-top: 20px; }
+    button { margin-left: 5px; }
   </style>
 </head>
 <body>
 
-  <h1>Album Explorer</h1>
+<h1>Album Explorer</h1>
 
-  <div>
-    <input id="artist" placeholder="Artist name">
-    <input id="album" placeholder="Album name">
-    <button id="searchBtn">Search</button>
-    <button id="randomBtn">Random Album</button>
-  </div>
+<div>
+  <input id="artist" placeholder="Artist name">
+  <input id="album" placeholder="Album name">
+  <button id="searchBtn">Search</button>
+  <button id="randomBtn">Random Album</button>
+</div>
 
-  <div class="result" id="result"></div>
+<div class="result" id="result"></div>
 
-  <script>
-    const resultDiv = document.getElementById('result');
+<script>
+  const resultDiv = document.getElementById('result');
 
-    async function fetchAlbum(artist, album) {
-      const query = `artist:${artist} AND release:${album}`;
-      const url = `https://musicbrainz.org/ws/2/release/?query=${encodeURIComponent(query)}&fmt=json&limit=1`;
-
+  async function fetchCover(releaseId) {
+    const url = `https://coverartarchive.org/release/${releaseId}/front`;
+    // test if image exists
+    try {
       const res = await fetch(url);
-      const data = await res.json();
+      if (!res.ok) throw new Error('No cover');
+      return url;
+    } catch {
+      return null;
+    }
+  }
 
-      if (!data.releases || data.releases.length === 0) {
-        resultDiv.innerHTML = 'No results found.';
-        return;
-      }
+  async function fetchAlbum(artist, album) {
+    const query = `artist:${artist} AND release:${album}`;
+    const url = `https://musicbrainz.org/ws/2/release/?query=${encodeURIComponent(query)}&fmt=json&limit=1`;
 
-      const releaseId = data.releases[0].id;
-      const releaseTitle = data.releases[0]['title'];
-      const artistName = data.releases[0]['artist-credit'][0].name;
+    const res = await fetch(url);
+    const data = await res.json();
 
-      const imageUrl = `https://coverartarchive.org/release/${releaseId}/front`;
+    if (!data.releases || data.releases.length === 0) {
+      resultDiv.innerHTML = 'No results found.';
+      return;
+    }
 
+    const release = data.releases[0];
+    const releaseId = release.id;
+    const releaseTitle = release.title;
+    const artistName = release['artist-credit'][0].name;
+
+    const imageUrl = await fetchCover(releaseId);
+
+    if (imageUrl) {
       resultDiv.innerHTML = `
         <h3>${artistName} – ${releaseTitle}</h3>
         <img src="${imageUrl}" alt="Album cover">
-        <p>Release ID: ${releaseId}</p>
+      `;
+    } else {
+      resultDiv.innerHTML = `
+        <h3>${artistName} – ${releaseTitle}</h3>
+        <p>No cover art available.</p>
       `;
     }
+  }
 
-    async function fetchRandomAlbum() {
-      // Generate random offset up to 100k
-      const offset = Math.floor(Math.random() * 100000);
+  async function fetchRandomAlbum() {
+    const offset = Math.floor(Math.random() * 100000); // pick random offset
+    const url = `https://musicbrainz.org/ws/2/release/?query=primarytype:album&fmt=json&limit=1&offset=${offset}`;
 
-      const url = `https://musicbrainz.org/ws/2/release/?query=primarytype:album&fmt=json&limit=1&offset=${offset}`;
-      const res = await fetch(url);
-      const data = await res.json();
+    const res = await fetch(url);
+    const data = await res.json();
 
-      if (!data.releases || data.releases.length === 0) {
-        resultDiv.innerHTML = 'Couldn’t find a random album. Try again.';
-        return;
-      }
+    if (!data.releases || data.releases.length === 0) {
+      resultDiv.innerHTML = 'Couldn’t find a random album. Try again.';
+      return;
+    }
 
-      const releaseId = data.releases[0].id;
-      const releaseTitle = data.releases[0]['title'];
-      const artistName = data.releases[0]['artist-credit'][0].name;
-      const imageUrl = `https://coverartarchive.org/release/${releaseId}/front`;
+    const release = data.releases[0];
+    const releaseId = release.id;
+    const releaseTitle = release.title;
+    const artistName = release['artist-credit'][0].name;
 
+    const imageUrl = await fetchCover(releaseId);
+
+    if (imageUrl) {
       resultDiv.innerHTML = `
         <h3>${artistName} – ${releaseTitle}</h3>
         <img src="${imageUrl}" alt="Album cover">
-        <p>Release ID: ${releaseId}</p>
+      `;
+    } else {
+      resultDiv.innerHTML = `
+        <h3>${artistName} – ${releaseTitle}</h3>
+        <p>No cover art available.</p>
       `;
     }
+  }
 
-    document.getElementById('searchBtn').addEventListener('click', () => {
-      const artist = document.getElementById('artist').value.trim();
-      const album = document.getElementById('album').value.trim();
+  document.getElementById('searchBtn').addEventListener('click', () => {
+    const artist = document.getElementById('artist').value.trim();
+    const album = document.getElementById('album').value.trim();
 
-      if (!artist || !album) {
-        resultDiv.innerHTML = 'Please enter both artist and album.';
-        return;
-      }
+    if (!artist || !album) {
+      resultDiv.innerHTML = 'Please enter both artist and album.';
+      return;
+    }
 
-      fetchAlbum(artist, album);
-    });
+    fetchAlbum(artist, album);
+  });
 
-    document.getElementById('randomBtn').addEventListener('click', () => {
-      fetchRandomAlbum();
-    });
-  </script>
+  document.getElementById('randomBtn').addEventListener('click', () => {
+    fetchRandomAlbum();
+  });
+</script>
 
 </body>
 </html>

@@ -24,6 +24,27 @@
 <div class="result" id="result"></div>
 
 <script>
+
+function renderHistory() {
+  const historyDiv = document.getElementById('history');
+  let history = JSON.parse(localStorage.getItem('albumHistory') || '[]');
+
+  if (history.length === 0) {
+    historyDiv.innerHTML = '<p>No history yet.</p>';
+    return;
+  }
+
+  historyDiv.innerHTML = history.map(album => `
+    <div style="margin-bottom: 10px;">
+      <strong>${album.artistName} — ${album.releaseTitle}</strong><br>
+      ${album.imageUrl ? `<img src="${album.imageUrl}" style="max-width: 120px;">` : ''}
+    </div>
+  `).join('');
+}
+
+// run automatically
+renderHistory();
+
   const resultDiv = document.getElementById('result');
 
   async function fetchCover(releaseId) {
@@ -102,6 +123,12 @@
       `;
     }
   }
+  
+  <h2>History</h2>
+  <div id="history"></div>
+  <button onclick="clearHistory()">Clear History</button>
+
+
 
   document.getElementById('searchBtn').addEventListener('click', () => {
     const artist = document.getElementById('artist').value.trim();
@@ -117,6 +144,19 @@
 
   document.getElementById('randomBtn').addEventListener('click', () => {
     fetchRandomAlbum();
+    
+    function saveAlbumToHistory(artistName, releaseTitle, imageUrl) {
+  let history = JSON.parse(localStorage.getItem('albumHistory') || '[]');
+
+  history.unshift({ artistName, releaseTitle, imageUrl, timestamp: Date.now() });
+  if (history.length > 30) history.pop(); // optional limit
+
+  localStorage.setItem('albumHistory', JSON.stringify(history));
+  renderHistory();
+}
+
+
+    
   });
 </script>
 

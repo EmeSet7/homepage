@@ -40,7 +40,8 @@
 
   async function fetchAlbum(artist, album) {
     const query = `artist:${artist} AND release:${album}`;
-    const url = `https://musicbrainz.org/ws/2/release/?query=${encodeURIComponent(query)}&fmt=json&limit=1`;
+    const url = `https://musicbrainz.org/ws/2/release/?query=artist:${artist}+AND+status:official+AND+(primary-type:album OR primary-type:ep)&fmt=json`;
+
 
     const res = await fetch(url);
     const data = await res.json();

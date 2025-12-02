@@ -1,4 +1,4 @@
-  const resultDiv = document.getElementById('result');
+const resultDiv = document.getElementById('result');
 
   async function fetchCover(releaseId) {
     const url = `https://coverartarchive.org/release/${releaseId}/front`;
@@ -91,3 +91,4 @@
 
   document.getElementById('randomBtn').addEventListener('click', () => {
     fetchRandomAlbum();
+  });

@@ -1,35 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Album Explorer</title>
-  <style>
-    body { font-family: sans-serif; padding: 20px; }
-    img { max-width: 300px; margin-top: 20px; display: block; }
-    .result { margin-top: 20px; }
-    button { margin-left: 5px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Album Generator</title>
 </head>
 <body>
+    <h1>Random Album Generator</h1>
+    
+    <button id="generateButton">Get Random Album</button>
 
-<h1>Album Explorer</h1>
+    <div id="album">
+        <h2 id="albumTitle"></h2>
+        <h3 id="artistName"></h3>
+        <img id="coverArt" src="" alt="Cover Art" style="max-width: 300px; display: none;">
+    </div>
 
-<main>
-        <section>
-            <a href="index.html">Home</a>
-        </section>
-    </main>
-  
-<div>
-  <input id="artist" placeholder="Artist name">
-  <input id="album" placeholder="Album name">
-  <button id="searchBtn">Search</button>
-  <button id="randomBtn">Random Album</button>
-</div>
-
-<div class="result" id="result"></div>
-
-<script src="album.js"></script>
-
+    <!-- Load your separate JS file -->
+    <script src="app.js"></script>
 </body>
 </html>

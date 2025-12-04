@@ -9,6 +9,14 @@
     <!-- Header -->
     <header>
         <h1>Welcome to My Website</h1>
+        <div id="header"></div>
+        <script>
+            fetch("header.html")
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById("header").innerHTML = html;
+            });
+        </script>
     </header>
 
     <!-- Main content -->

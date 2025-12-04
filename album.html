@@ -1,13 +1,21 @@
 <html lang="en">
+
+<header>
+    <h1>Welcome to My Website</h1>
+    <div id="header"></div>
+    <script>
+        fetch("header.html")
+        .then(res => res.text())
+        .then(html => {
+            document.getElementById("header").innerHTML = html;
+        });
+    </script>
+</header>
+  
 <head>
-  <meta charset="UTF-8">
+
   <title>Album Explorer</title>
-  <style>
-    body { font-family: sans-serif; padding: 20px; }
-    img { max-width: 300px; margin-top: 20px; display: block; }
-    .result { margin-top: 20px; }
-    button { margin-left: 5px; }
-  </style>
+
 </head>
 <body>
 
@@ -15,7 +23,7 @@
 
 <main>
         <section>
-            <a href="index.html">Home</a>
+
         </section>
     </main>
   

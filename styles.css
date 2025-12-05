@@ -19,7 +19,7 @@ body {
 }
 
 .navbar a:hover {
-  background-color: dim gray;
+  background-color: lightgray;
   color: black;
   
 }

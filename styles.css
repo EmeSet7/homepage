@@ -1,11 +1,12 @@
 body {
   font-family: Verdana;
   background-color: #99F;
+  cursor: url('ccursor.png'), auto;
 }
 
 .navbar {
   overflow: hidden;
-  background-color: grey;
+  background-color: gray;
 }
 
 .navbar a {
@@ -18,7 +19,7 @@ body {
 }
 
 .navbar a:hover {
-  background-color: white;
-  color: white;
+  background-color: dim gray;
+  color: black;
   
 }

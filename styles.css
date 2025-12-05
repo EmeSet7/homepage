@@ -1,4 +1,5 @@
 body {
+  float: center;
   font-family: Verdana;
   background-color: #99F;
   /*
@@ -12,7 +13,7 @@ body {
 }
 
 .navbar a {
-  float: left;
+  float: center;
   font-size: 16px;
   color: black;
   text-align: center;

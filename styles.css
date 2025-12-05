@@ -1,7 +1,9 @@
 body {
   font-family: Verdana;
   background-color: #99F;
+  /*
   cursor: url('ccursor.png'), auto;
+  */
 }
 
 .navbar {
